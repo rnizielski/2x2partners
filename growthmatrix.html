@@ -1,143 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GrowthMatrix™ | 2x2 Partners</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GrowthMatrix™ | 2x2 Partners</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #111827;
+      --panel-2: #161f2d;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --line: rgba(255,255,255,0.08);
+      --accent: #d4af37;
+      --accent-soft: rgba(212, 175, 55, 0.12);
+      --max: 1180px;
+      --radius: 18px;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
+    html {
+      scroll-behavior: smooth;
+    }
 
-body{
-margin:0;
-font-family: Arial, Helvetica, sans-serif;
-background:#0f0f12;
-color:#ffffff;
-}
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212,175,55,0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(255,255,255,0.04), transparent 20%),
+        linear-gradient(180deg, #0b0f15 0%, #101826 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
 
-nav{
-position:fixed;
-top:0;
-left:0;
-right:0;
-height:70px;
-background:#0f0f12;
-border-bottom:1px solid rgba(255,255,255,.08);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:100;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-nav ul{
-display:flex;
-gap:50px;
-list-style:none;
-padding:0;
-margin:0;
-}
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
 
-nav a{
-text-decoration:none;
-color:#bfc3c9;
-font-size:13px;
-letter-spacing:1px;
-text-transform:uppercase;
-}
+    .section {
+      padding: 88px 0;
+    }
 
-nav a:hover{
-color:#ffffff;
-}
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:140px 40px 80px 40px;
-}
+    h1, h2, h3, h4 {
+      margin: 0 0 16px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
 
-h1{
-font-size:48px;
-margin-bottom:20px;
-}
+    h1 {
+      font-size: clamp(2.7rem, 7vw, 5rem);
+      font-weight: 800;
+    }
 
-h2{
-margin-top:60px;
-margin-bottom:20px;
-font-size:26px;
-}
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 750;
+    }
 
-p{
-color:#c8cbd0;
-line-height:1.6;
-font-size:17px;
-}
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
 
-ul{
-margin-top:20px;
-line-height:1.8;
-color:#c8cbd0;
-}
+    p {
+      margin: 0 0 18px;
+      color: rgba(243,244,246,0.92);
+      font-size: 1.04rem;
+    }
 
-.node{
-padding:8px 0;
-font-size:18px;
-}
+    .lead {
+      font-size: 1.22rem;
+      color: rgba(243,244,246,0.88);
+      max-width: 860px;
+    }
 
-.footerlink{
-margin-top:60px;
-display:inline-block;
-color:#7ea6ff;
-text-decoration:none;
-}
+    .muted {
+      color: var(--muted);
+    }
 
-.footerlink:hover{
-text-decoration:underline;
-}
+    .hero {
+      padding: 110px 0 88px;
+      border-bottom: 1px solid var(--line);
+    }
 
-</style>
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .hero-card p {
+      font-size: 0.98rem;
+      color: rgba(243,244,246,0.82);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      font-size: 1rem;
+      color: rgba(243,244,246,0.9);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel.soft {
+      background: linear-gradient(180deg, var(--accent-soft), rgba(255,255,255,0.02));
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #111;
+      background: var(--accent);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.25);
+    }
+
+    .nodes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .node {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+      min-height: 180px;
+    }
+
+    .node .category {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .node h3 {
+      margin-bottom: 10px;
+      font-size: 1.18rem;
+    }
+
+    .compound-list,
+    .outcome-list,
+    .partner-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .bullet-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .bullet-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 9px;
+      flex: 0 0 10px;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 96px 0 110px;
+    }
+
+    .cta-box {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 42px 30px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(212,175,55,0.08), rgba(255,255,255,0.025));
+      box-shadow: var(--shadow);
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(212,175,55,0.22);
+    }
+
+    .btn-secondary {
+      border-color: var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    footer {
+      padding: 28px 0 48px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-wrap,
+      .grid-2,
+      .nodes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 84px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .section {
+        padding: 72px 0;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+      }
+
+      .step-num {
+        width: 48px;
+        height: 48px;
+        font-size: 1rem;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 24px));
+      }
+
+      .hero-card,
+      .panel,
+      .node,
+      .cta-box {
+        padding: 22px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<nav>
-<ul>
-<li><a href="/">Services</a></li>
-<li><a href="/">Model</a></li>
-<li><a href="/growthmatrix.html">GrowthMatrix™</a></li>
-<li><a href="/">Network</a></li>
-<li><a href="/">About</a></li>
-</ul>
-</nav>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-wrap">
+        <div>
+          <span class="eyebrow">2x2 Partners Framework</span>
+          <h1>GrowthMatrix™</h1>
+          <p class="lead">
+            A structured system for accelerating growth.
+          </p>
+          <p>
+            GrowthMatrix aligns strategy, people, technology, and capital into a unified operating system that helps organizations move from linear progress to exponential expansion.
+          </p>
+          <p>
+            Developed through decades of building and scaling companies, the framework integrates market intelligence, revenue infrastructure, network effects, and modern technology to unlock growth.
+          </p>
 
-<div class="container">
+          <div class="btn-row" style="justify-content:flex-start;">
+            <a href="#growth-system" class="btn btn-primary">Explore the System</a>
+            <a href="#contact" class="btn btn-secondary">Contact 2x2 Partners</a>
+          </div>
+        </div>
 
-<h1>GrowthMatrix™</h1>
+        <div class="hero-card">
+          <h3>The Science of Growth</h3>
+          <p>
+            Companies behave much like living systems.
+          </p>
+          <p>
+            When the internal components of an organization—leadership, culture, sales infrastructure, technology, and capital—operate in isolation, growth slows.
+          </p>
+          <p>
+            GrowthMatrix is designed to align these components into a functioning system, allowing organizations to scale with clarity and efficiency.
+          </p>
 
-<p>
-GrowthMatrix™ is the strategic operating system developed by 2x2 Partners to identify growth opportunities, remove friction, and accelerate revenue.  
-It combines strategic thinking, network intelligence, and modern technology to help companies scale faster and more intelligently.
-</p>
+          <div class="hero-metrics">
+            <div class="metric">
+              <strong>Aligned System</strong>
+              <span>Leadership, market, process, technology, and capital operating together</span>
+            </div>
+            <div class="metric">
+              <strong>Growth Result</strong>
+              <span>More clarity, more leverage, less friction, and stronger compounding outcomes</span>
+            </div>
+            <div class="metric">
+              <strong>Core Principle</strong>
+              <span>When the system is aligned, growth compounds.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<h2>The Growth Nodes</h2>
+    <!-- SCIENCE / FRAMEWORK -->
+    <section class="section">
+      <div class="container grid-2">
+        <div class="panel">
+          <span class="eyebrow">System Logic</span>
+          <h2>Growth is not random.</h2>
+          <p>
+            Sustainable expansion happens when strategy, accountability, revenue infrastructure, incentives, and modern tools work as one integrated system.
+          </p>
+          <p>
+            GrowthMatrix is built to bring these components together so organizations can move with more speed, precision, and confidence.
+          </p>
+        </div>
 
-<ul>
-<li class="node">MarketIntel™</li>
-<li class="node">BrandCatalyst™</li>
-<li class="node">LeadFusion™</li>
-<li class="node">ClientPulse™</li>
-<li class="node">RevenueBoost™</li>
-<li class="node">NetEffect™</li>
-</ul>
+        <div class="panel soft">
+          <span class="eyebrow">Compounding Principle</span>
+          <h2>When alignment improves, performance accelerates.</h2>
+          <p>
+            Better intelligence improves positioning. Better positioning strengthens conversations. Stronger conversations create opportunities. Opportunities expand networks, partnerships, and access to capital.
+          </p>
+          <p>
+            Over time, the full system becomes self-reinforcing.
+          </p>
+        </div>
+      </div>
+    </section>
 
-<p>
-More coming soon.
-</p>
+    <!-- 2x2 GROWTH SYSTEM -->
+    <section class="section" id="growth-system">
+      <div class="container">
+        <span class="eyebrow">The 2x2 Growth System</span>
+        <h2>A repeatable methodology for building the growth engine.</h2>
+        <p class="lead">
+          GrowthMatrix is powered by a repeatable methodology developed through decades of experience building and scaling organizations.
+        </p>
 
-<a class="footerlink" href="/">← Back to 2x2 Partners</a>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Diagnose the System</h3>
+              <p>
+                Every organization has untapped potential. We analyze leadership, market positioning, sales infrastructure, and operational structure to identify friction and opportunity.
+              </p>
+            </div>
+          </div>
 
-</div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Establish Accountability</h3>
+              <p>
+                Clear ownership and measurable outcomes replace ambiguity. Teams perform best when expectations and responsibilities are transparent.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Rebuild the Growth Engine</h3>
+              <p>
+                We install the systems required for consistent revenue expansion, including target market intelligence, prospecting infrastructure, and pipeline management.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Remove Operational Friction</h3>
+              <p>
+                Organizations often slow their own growth through inefficient processes. Removing friction enables teams to focus on high-value work.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">5</div>
+            <div>
+              <h3>Align Incentives</h3>
+              <p>
+                Compensation structures and incentives must reinforce performance and collaboration.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">6</div>
+            <div>
+              <h3>Install Technology</h3>
+              <p>
+                Modern technology and automation amplify productive teams and improve decision-making.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">7</div>
+            <div>
+              <h3>Build Network Effects</h3>
+              <p>
+                Growth accelerates when relationships, partnerships, and intelligence networks compound over time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GROWTHNODES -->
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow">GrowthNodes™</span>
+        <h2>Specialized capabilities inside the GrowthMatrix framework.</h2>
+        <p class="lead">
+          GrowthMatrix is implemented through a series of specialized capabilities called GrowthNodes™. Each node represents a key area of organizational development.
+        </p>
+
+        <div class="nodes-grid">
+          <div class="node">
+            <div class="category">Market Intelligence</div>
+            <h3>MarketIntel™</h3>
+            <p>Data-driven insights that identify opportunities, competitors, and emerging trends.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Brand Development</div>
+            <h3>BrandCatalyst™</h3>
+            <p>Strategic positioning and brand design that resonates with the right audience.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Lead Generation</div>
+            <h3>LeadFusion™</h3>
+            <p>Systems for consistently generating and converting new opportunities.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Sales Infrastructure</div>
+            <h3>SalesElevate™</h3>
+            <p>Pipeline management, sales processes, and performance systems.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Client Engagement</div>
+            <h3>ClientPulse™</h3>
+            <p>Tools and strategies that strengthen client relationships and retention.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Strategic Partnerships</div>
+            <h3>AllianceForge™</h3>
+            <p>Building ecosystems of partners that create shared growth opportunities.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Capital Formation</div>
+            <h3>CapitalCatalyst™</h3>
+            <p>Connecting companies with the capital required to scale.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Technology Integration</div>
+            <h3>TechTrends™</h3>
+            <p>Adopting modern tools and automation to increase operational leverage.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Data Intelligence</div>
+            <h3>DataFusion™</h3>
+            <p>Transforming information into actionable insight.</p>
+          </div>
+
+          <div class="node">
+            <div class="category">Network Expansion</div>
+            <h3>NetEffect™</h3>
+            <p>Leveraging relationships and networks to accelerate growth.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPOUNDING GROWTH -->
+    <section class="section">
+      <div class="container grid-2">
+        <div class="panel">
+          <span class="eyebrow">Compounding Growth</span>
+          <h2>A self-reinforcing growth system.</h2>
+          <p>
+            When GrowthNodes operate together within the GrowthMatrix framework, organizations develop a self-reinforcing growth system.
+          </p>
+
+          <div class="compound-list">
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Improved intelligence leads to better positioning.</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Better positioning creates stronger conversations.</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Stronger conversations generate more opportunities.</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>More opportunities lead to expanded networks and partnerships.</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Over time, the system compounds.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Who It’s Built For</span>
+          <h2>Designed for organizations ready to scale with aligned systems.</h2>
+          <p>
+            GrowthMatrix is designed for organizations that want to accelerate growth but recognize that sustainable expansion requires aligned systems.
+          </p>
+
+          <div class="partner-list">
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Entrepreneurs and founders</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Growth-stage companies</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Private equity portfolio companies</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Venture-backed startups</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Established organizations entering new markets</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTCOMES -->
+    <section class="section">
+      <div class="container">
+        <div class="panel soft">
+          <span class="eyebrow">The Outcome</span>
+          <h2>Growth becomes intentional rather than accidental.</h2>
+          <p class="lead">
+            Organizations that implement GrowthMatrix often experience:
+          </p>
+
+          <div class="outcome-list">
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Faster revenue growth</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Stronger organizational alignment</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Improved sales performance</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Expanded networks and partnerships</div>
+            </div>
+            <div class="bullet-row">
+              <div class="bullet-dot"></div>
+              <div>Increased strategic clarity</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-box">
+          <span class="eyebrow">Begin the Conversation</span>
+          <h2>Explore how GrowthMatrix can help accelerate your organization’s growth.</h2>
+          <p class="lead" style="margin: 0 auto;">
+            Contact 2x2 Partners to begin the conversation.
+          </p>
+
+          <div class="btn-row">
+            <a href="mailto:rnizielski@2x2partners.com" class="btn btn-primary">Contact 2x2 Partners</a>
+            <a href="https://2x2partners.com/" class="btn btn-secondary">Back to Main Site</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      GrowthMatrix™ by 2x2 Partners
+    </div>
+  </footer>
 
 </body>
 </html>
