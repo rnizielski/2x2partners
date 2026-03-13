@@ -4,822 +4,633 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capital Catalyst™ — 2x2 Partners</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:          #0A0A09;
-    --bg-mid:      #111110;
-    --bg-card:     #161614;
-    --white:       #F4F2EE;
-    --white-dim:   rgba(244,242,238,0.55);
-    --white-faint: rgba(244,242,238,0.18);
-    --rule:        rgba(244,242,238,0.1);
-    --rule-mid:    rgba(244,242,238,0.06);
-    --tag:         rgba(244,242,238,0.07);
-    --serif:       'DM Serif Display', Georgia, serif;
-    --sans:        'DM Sans', system-ui, sans-serif;
+    --ink:         #09090b;
+    --ink-deep:    #050507;
+    --surface:     #0f0f12;
+    --lift:        rgba(255,255,255,0.032);
+    --lift-2:      rgba(255,255,255,0.055);
+    --rule:        rgba(255,255,255,0.08);
+    --rule-strong: rgba(255,255,255,0.14);
+    --text:        #f4f4f5;
+    --muted:       rgba(244,244,245,0.55);
+    --faint:       rgba(244,244,245,0.28);
+    --teal:        #008B98;
+    --teal-light:  #0aabb9;
+    --teal-dim:    rgba(0,139,152,0.18);
+    --green:       #26C699;
+    --max:         1280px;
+    --pad:         clamp(24px,4vw,56px);
   }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; font-size: 16px; }
 
   body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--white);
-    font-size: 15px;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    background: var(--ink-deep);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
   }
+
+  /* ── CURSOR ── */
+  .cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+  .cursor-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #fff; position: absolute;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s ease, width 0.3s, height 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.4);
+    position: absolute; transform: translate(-50%,-50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--teal-light); }
+  body.cursor-hover .cursor-ring { width: 52px; height: 52px; border-color: var(--teal); }
+
+  /* ── GRAIN ── */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px; opacity: 0.028;
+  }
+
+  /* ── AMBIENT ── */
+  .ambient {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 10%, rgba(0,139,152,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 85% 85%, rgba(38,198,153,0.05) 0%, transparent 55%);
+  }
+
+  /* ── LAYOUT ── */
+  .wrap {
+    position: relative; z-index: 2;
+    width: min(var(--max), 100% - var(--pad)*2);
+    margin: 0 auto;
+  }
+  a { color: inherit; text-decoration: none; }
 
   /* ── NAV ── */
   nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.6rem 3rem;
-    border-bottom: 1px solid var(--rule);
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 100;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0; border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s, backdrop-filter 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(9,9,11,0.82);
+    backdrop-filter: blur(24px) saturate(140%);
+    border-color: var(--rule);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+
+  .logomark {
+    display: flex; align-items: baseline; gap: 0;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700; font-size: 20px; letter-spacing: -0.01em;
+    color: var(--text); line-height: 1; transition: opacity 0.2s;
+  }
+  .logomark:hover { opacity: 0.8; }
+  .logomark .chevrons { color: var(--teal); font-size: 18px; letter-spacing: -0.08em; margin: 0 1px; }
+  .logomark .wordmark {
+    font-family: 'Manrope', sans-serif; font-weight: 600;
+    font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--muted); margin-left: 11px; align-self: flex-end; padding-bottom: 1px;
   }
 
-  .nav-logo {
-    font-family: var(--sans);
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-  }
-
-  .nav-logo .mark {
-    font-family: var(--serif);
-    font-size: 1.15rem;
-    font-style: italic;
-    opacity: 0.9;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
+  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
   .nav-links a {
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    color: var(--white-dim);
-    text-decoration: none;
-    transition: color 0.2s;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted);
+    position: relative; transition: color 0.2s;
   }
-  .nav-links a:hover { color: var(--white); }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--teal);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { transform: scaleX(1); }
 
   .nav-cta {
-    font-size: 0.75rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: var(--white);
-    text-decoration: none;
-    border: 1px solid var(--rule-mid);
-    padding: 0.5rem 1.25rem;
-    transition: border-color 0.2s, background 0.2s;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 10px 22px; border: 1px solid var(--teal);
+    color: var(--teal); border-radius: 2px;
+    transition: background 0.25s, color 0.25s;
   }
-  .nav-cta:hover { border-color: rgba(244,242,238,0.3); background: var(--tag); }
-
-  /* ── LAYOUT ── */
-  .container { max-width: 1080px; margin: 0 auto; padding: 0 3rem; }
-
-  section { padding: 8rem 0; }
-
-  .section-rule {
-    border-top: 1px solid var(--rule);
-    margin-bottom: 5rem;
-    padding-top: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .section-rule span {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--white-faint);
-  }
-
-  .label-num {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 0.72rem;
-    color: var(--white-faint);
-    margin-right: 0.5rem;
-  }
-
-  h2 {
-    font-family: var(--serif);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 400;
-    line-height: 1.15;
-    color: var(--white);
-  }
-
-  h2 em {
-    font-style: italic;
-    color: rgba(244,242,238,0.7);
-  }
+  .nav-cta:hover { background: var(--teal); color: #fff; }
 
   /* ── HERO ── */
   .hero {
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 3rem 6rem;
-    border-bottom: 1px solid var(--rule);
+    min-height: 100svh; display: grid; grid-template-rows: 1fr auto;
+    padding-top: 72px; position: relative;
+  }
+  .hero-body {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 10vh 0 6vh;
+  }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .hero-kicker::before { content: ''; display: block; width: 28px; height: 1px; background: var(--teal); }
+
+  .hero-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-size: clamp(52px, 7vw, 92px);
+    line-height: 0.95; letter-spacing: -0.02em;
+    color: var(--text); max-width: 1000px;
+    opacity: 0; animation: fadeUp 0.9s 0.35s ease forwards;
+  }
+  .hero-headline em { font-style: italic; color: var(--teal-light); }
+
+  .hero-sub {
+    margin-top: 42px; max-width: 520px;
+    font-size: 16px; line-height: 1.85;
+    color: var(--muted); font-weight: 400;
+    opacity: 0; animation: fadeUp 0.8s 0.55s ease forwards;
   }
 
-  .hero-eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    margin-bottom: 2rem;
+  .hero-actions {
+    margin-top: 52px; display: flex; gap: 20px; align-items: center;
+    opacity: 0; animation: fadeUp 0.8s 0.7s ease forwards;
   }
 
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(3.5rem, 8vw, 7rem);
-    font-weight: 400;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: var(--white);
-    max-width: 900px;
+  .btn-prim {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 16px 36px; background: var(--teal); color: #fff;
+    border: 1px solid var(--teal); border-radius: 2px;
+    transition: background 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden; display: inline-block;
   }
+  .btn-prim::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .btn-prim:hover { background: var(--teal-light); box-shadow: 0 8px 32px rgba(0,139,152,0.35); }
+  .btn-prim:hover::after { opacity: 1; }
 
-  .hero-title em {
-    font-style: italic;
-    color: rgba(244,242,238,0.6);
+  .btn-ghost {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); display: inline-flex; align-items: center; gap: 8px;
+    transition: color 0.2s, gap 0.2s;
   }
+  .btn-ghost:hover { color: var(--text); gap: 14px; }
+  .btn-ghost span { font-size: 16px; }
 
-  .hero-bottom {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: 4rem;
-    gap: 3rem;
+  .hero-rule { border: none; border-top: 1px solid var(--rule); opacity: 0; animation: fadeIn 1s 1s ease forwards; }
+  .hero-footer {
+    display: flex; align-items: center; justify-content: space-between; padding: 24px 0;
+    opacity: 0; animation: fadeUp 0.6s 1.1s ease forwards;
   }
+  .hero-scroll-hint {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint);
+  }
+  .scroll-line { width: 40px; height: 1px; background: var(--faint); position: relative; overflow: hidden; }
+  .scroll-line::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: var(--teal); animation: scanline 2.5s 1.5s ease-in-out infinite;
+  }
+  @keyframes scanline { 0%{left:-100%} 100%{left:100%} }
 
-  .hero-desc {
-    font-size: 0.92rem;
-    color: var(--white-dim);
-    line-height: 1.85;
-    max-width: 420px;
-    font-weight: 300;
+  .hero-stats { display: flex; gap: 48px; }
+  .hstat { text-align: right; }
+  .hstat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 300; color: var(--text); line-height: 1;
   }
+  .hstat-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 4px; }
 
-  .hero-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.75rem;
-    flex-shrink: 0;
-  }
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 2; }
 
-  .hero-links a {
-    font-size: 0.82rem;
-    color: var(--white-dim);
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    transition: color 0.2s;
+  .section-intro { padding: 120px 0 80px; border-top: 1px solid var(--rule); }
+
+  .section-tag {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--faint);
   }
-  .hero-links a:hover { color: var(--white); }
-  .hero-links a.primary {
-    color: var(--white);
-    border-bottom: 1px solid rgba(244,242,238,0.25);
-    padding-bottom: 0.1rem;
+  .section-tag::before { content: ''; width: 20px; height: 1px; background: var(--teal); }
+  .section-tag .num { color: var(--teal); }
+
+  .section-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300; line-height: 1.08; letter-spacing: -0.015em;
+    color: var(--text); max-width: 800px;
+  }
+  .section-h em { font-style: italic; color: var(--teal-light); }
+
+  .section-body {
+    font-size: 16px; line-height: 1.9; color: var(--muted);
+    max-width: 560px; margin-top: 22px; font-weight: 400;
   }
 
   /* ── PHILOSOPHY ── */
-  .philosophy { background: var(--bg); }
+  .philosophy-section { padding: 120px 0; border-top: 1px solid var(--rule); }
 
-  .phil-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 6rem;
-    margin-top: 4rem;
-    align-items: start;
+  .phil-layout {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 96px;
+    align-items: start; margin-top: 72px;
   }
-
+  .phil-left { position: sticky; top: 120px; }
   .phil-left p {
-    font-size: 0.9rem;
-    color: var(--white-dim);
-    line-height: 1.9;
-    font-weight: 300;
-    margin-bottom: 1rem;
-    margin-top: 1.5rem;
+    font-size: 15px; line-height: 1.9; color: var(--muted);
+    margin-top: 20px; font-weight: 400;
   }
 
-  .phil-principles {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 1px solid var(--rule);
+  .principles-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule);
   }
-
-  .principle {
-    padding: 2rem;
-    border-bottom: 1px solid var(--rule);
-    border-right: 1px solid var(--rule);
+  .principle-item {
+    background: var(--ink-deep); padding: 36px 32px;
+    transition: background 0.3s; position: relative; overflow: hidden;
   }
-
-  .principle:nth-child(even) { border-right: none; }
-  .principle:nth-last-child(-n+2) { border-bottom: none; }
-
-  .prin-num {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.4rem;
-    color: var(--white-faint);
-    display: block;
-    margin-bottom: 0.75rem;
-    line-height: 1;
+  .principle-item:hover { background: var(--lift); }
+  .principle-item::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, var(--teal), transparent);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
   }
+  .principle-item:hover::after { transform: scaleX(1); }
+  .principle-item.full { grid-column: 1 / -1; }
 
-  .prin-title {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--white);
-    margin-bottom: 0.5rem;
+  .p-index {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--faint);
+    text-transform: uppercase; margin-bottom: 14px; display: block;
   }
-
-  .prin-body {
-    font-size: 0.82rem;
-    color: var(--white-dim);
-    line-height: 1.75;
-    font-weight: 300;
+  .p-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 400; color: var(--text);
+    margin-bottom: 10px; line-height: 1.2;
   }
+  .p-text { font-size: 13px; line-height: 1.8; color: var(--muted); font-weight: 400; }
 
   /* ── PROCESS ── */
-  .process {
-    background: var(--bg-mid);
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
+  .process-section { padding: 120px 0; border-top: 1px solid var(--rule); }
 
   .process-steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border: 1px solid var(--rule);
-    margin-top: 4rem;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-left: 1px solid var(--rule);
+    margin-top: 72px;
   }
-
   .step {
-    padding: 2.5rem 2rem;
+    padding: 44px 36px;
     border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+    position: relative; transition: background 0.35s;
   }
-  .step:last-child { border-right: none; }
+  .step::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--teal);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+  }
+  .step:hover { background: var(--lift); }
+  .step:hover::before { transform: scaleX(1); }
 
   .step-num {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 2.5rem;
-    color: var(--white-faint);
-    line-height: 1;
-    margin-bottom: 1.5rem;
-    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; color: var(--faint); letter-spacing: 0.1em;
+    margin-bottom: 28px; display: block;
   }
-
   .step-title {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--white);
-    margin-bottom: 0.75rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.2;
+    color: var(--text); margin-bottom: 14px;
   }
-
-  .step-body {
-    font-size: 0.82rem;
-    color: var(--white-dim);
-    line-height: 1.8;
-    font-weight: 300;
-  }
+  .step-body { font-size: 13px; line-height: 1.85; color: var(--muted); }
 
   /* ── PULL QUOTE ── */
-  .pull {
-    background: var(--bg);
-    padding: 7rem 3rem;
-    border-bottom: 1px solid var(--rule);
+  .pull-section {
+    padding: 120px 0; border-top: 1px solid var(--rule);
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,139,152,0.06) 0%, transparent 70%);
   }
-
-  .pull-inner {
-    max-width: 820px;
-    margin: 0 auto;
-  }
-
+  .pull-inner { max-width: 860px; margin: 0 auto; text-align: center; }
   .pull-quote {
-    font-family: var(--serif);
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
-    font-weight: 400;
-    font-style: italic;
-    color: rgba(244,242,238,0.65);
-    line-height: 1.35;
-    margin-bottom: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 4vw, 46px);
+    font-weight: 300; font-style: italic;
+    color: rgba(244,244,245,0.72); line-height: 1.35; margin-bottom: 28px;
   }
-
   .pull-attr {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--white-faint);
-    font-weight: 400;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
   }
+  .pull-attr::before { content: '— '; color: var(--teal); }
 
   /* ── TIERS ── */
-  .tiers { background: var(--bg); }
+  .tiers-section { padding: 120px 0; border-top: 1px solid var(--rule); }
 
-  .tiers-intro {
-    font-size: 0.88rem;
-    color: var(--white-dim);
-    font-weight: 300;
-    max-width: 500px;
-    line-height: 1.85;
-    margin-top: 1rem;
-  }
+  .tiers-intro { font-size: 16px; color: var(--muted); font-weight: 400; max-width: 500px; line-height: 1.85; margin-top: 20px; }
 
-  .tiers-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-top: 3.5rem;
-  }
+  .tiers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 72px; }
 
   .tier {
-    border: 1px solid var(--rule);
-    padding: 3rem 2.75rem;
-    background: var(--bg-card);
-    transition: border-color 0.25s;
+    background: var(--ink-deep); padding: 52px 48px;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
   }
-  .tier:hover { border-color: rgba(244,242,238,0.22); }
+  .tier:hover { background: var(--lift); }
+  .tier.featured { background: var(--surface); }
+  .tier.featured:hover { background: var(--lift-2); }
 
-  .tier.featured {
-    border-color: rgba(244,242,238,0.2);
-    background: #1A1A17;
+  .tier::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
   }
+  .tier:hover::before { transform: scaleX(1); }
+  .tier.featured::before { transform: scaleX(1); }
 
-  .tier-tag {
-    display: inline-block;
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    border: 1px solid var(--rule);
-    padding: 0.2rem 0.75rem;
-    margin-bottom: 2rem;
-    background: var(--tag);
+  .tier-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 32px;
   }
+  .tier-badge::before { content: ''; width: 16px; height: 1px; background: var(--teal); }
 
   .tier-name {
-    font-family: var(--serif);
-    font-size: 1.9rem;
-    font-weight: 400;
-    color: var(--white);
-    margin-bottom: 1rem;
-    line-height: 1.1;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300; line-height: 1.05;
+    color: var(--text); margin-bottom: 20px;
   }
-
-  .tier-name em {
-    font-style: italic;
-    color: rgba(244,242,238,0.6);
-  }
+  .tier-name em { font-style: italic; color: var(--teal-light); }
 
   .tier-price {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px;
+    border-bottom: 1px solid var(--rule); padding-bottom: 24px;
   }
-
-  .price-num {
-    font-family: var(--serif);
-    font-size: 2.8rem;
-    font-weight: 400;
-    color: var(--white);
-    line-height: 1;
+  .price-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: var(--text); line-height: 1;
   }
+  .price-unit { font-size: 13px; color: var(--faint); font-weight: 400; }
 
-  .price-unit {
-    font-size: 0.8rem;
-    color: var(--white-dim);
-    font-weight: 300;
-  }
+  .tier-desc { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 32px; }
 
-  .tier-desc {
-    font-size: 0.86rem;
-    color: var(--white-dim);
-    line-height: 1.85;
-    font-weight: 300;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--rule-mid);
-  }
-
-  .tier-features {
-    list-style: none;
-    margin-bottom: 2.5rem;
-  }
-
+  .tier-features { list-style: none; margin-bottom: 40px; display: flex; flex-direction: column; gap: 0; }
   .tier-features li {
-    font-size: 0.84rem;
-    color: var(--white-dim);
-    font-weight: 300;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid var(--rule-mid);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.85rem;
-    line-height: 1.55;
+    font-size: 13px; color: var(--muted);
+    display: flex; align-items: flex-start; gap: 14px; line-height: 1.6;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
   }
   .tier-features li:last-child { border-bottom: none; }
+  .tier-features li::before { content: '—'; color: var(--teal); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
 
-  .li-mark {
-    color: rgba(244,242,238,0.3);
-    font-size: 0.6rem;
-    margin-top: 0.35rem;
-    flex-shrink: 0;
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); margin-top: 28px;
   }
+  .stat-item {
+    background: var(--ink-deep); padding: 32px 28px; text-align: center;
+    transition: background 0.3s;
+  }
+  .stat-item:hover { background: var(--lift); }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300; font-style: italic;
+    color: var(--text); display: block; line-height: 1;
+  }
+  .stat-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-top: 8px; display: block; }
 
-  /* ── BUTTONS ── */
-  .btn {
-    display: inline-block;
-    font-family: var(--sans);
-    font-size: 0.75rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 0.85rem 2rem;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-    cursor: pointer;
-  }
+  .tiers-footnote { margin-top: 20px; font-size: 12px; color: var(--faint); line-height: 1.7; }
 
-  .btn-light {
-    background: var(--white);
-    color: var(--bg);
-    border: 1px solid var(--white);
-  }
-  .btn-light:hover { background: rgba(244,242,238,0.88); }
+  /* ── RULES ── */
+  .rules-section { padding: 120px 0; border-top: 1px solid var(--rule); }
 
-  .btn-outline {
-    background: transparent;
-    color: var(--white-dim);
-    border: 1px solid var(--rule);
-  }
-  .btn-outline:hover { border-color: rgba(244,242,238,0.3); color: var(--white); }
-
-  /* ── STATS ── */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border: 1px solid var(--rule);
-    margin-top: 5rem;
-  }
-
-  .stat {
-    padding: 2.5rem 2rem;
-    border-right: 1px solid var(--rule);
-    text-align: center;
-  }
-  .stat:last-child { border-right: none; }
-
-  .stat-num {
-    font-family: var(--serif);
-    font-size: 2.5rem;
-    font-style: italic;
-    color: var(--white);
-    display: block;
-    margin-bottom: 0.35rem;
-  }
-
-  .stat-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--white-faint);
-    font-weight: 300;
-  }
-
-  .tiers-footnote {
-    margin-top: 1.75rem;
-    font-size: 0.72rem;
-    color: var(--white-faint);
-    font-weight: 300;
-    letter-spacing: 0.03em;
-  }
-
-  /* ── RULES OF ENGAGEMENT ── */
-  .rules {
-    background: var(--bg-mid);
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .rules-lead {
-    font-size: 0.95rem;
-    color: var(--white-dim);
-    line-height: 1.9;
-    font-weight: 300;
-    max-width: 600px;
-    margin-top: 1rem;
-  }
+  .rules-lead { font-size: 16px; color: var(--muted); font-weight: 400; max-width: 560px; line-height: 1.85; margin-top: 20px; }
 
   .dos-donts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 1px solid var(--rule);
-    margin-top: 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); margin-top: 72px;
   }
 
-  .dos { border-right: 1px solid var(--rule); }
-
-  .dos,
-  .donts { padding: 2.75rem; }
+  .dos, .donts { background: var(--ink-deep); padding: 48px 44px; }
 
   .col-head {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--rule-mid);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 32px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule-strong);
+    display: flex; align-items: center; gap: 10px;
   }
+  .col-head::before { content: ''; width: 14px; height: 1px; background: var(--teal); }
 
-  .dos ul,
-  .donts ul { list-style: none; }
+  .dos ul, .donts ul { list-style: none; display: flex; flex-direction: column; gap: 0; }
 
-  .dos li,
-  .donts li {
-    font-size: 0.86rem;
-    color: var(--white-dim);
-    font-weight: 300;
-    padding: 0.65rem 0;
-    border-bottom: 1px solid var(--rule-mid);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.85rem;
-    line-height: 1.6;
+  .dos li, .donts li {
+    font-size: 14px; color: var(--muted); font-weight: 400;
+    padding: 14px 0; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: flex-start; gap: 14px; line-height: 1.6;
   }
-  .dos li:last-child,
-  .donts li:last-child { border-bottom: none; }
+  .dos li:last-child, .donts li:last-child { border-bottom: none; }
 
-  .do-mark {
-    color: rgba(244,242,238,0.5);
-    font-size: 0.65rem;
-    flex-shrink: 0;
-    margin-top: 0.3rem;
-  }
-  .dont-mark {
-    color: rgba(244,242,238,0.15);
-    font-size: 0.65rem;
-    flex-shrink: 0;
-    margin-top: 0.3rem;
-  }
+  .do-mark { color: var(--teal); font-size: 14px; flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+  .dont-mark { color: rgba(244,244,245,0.18); font-size: 14px; flex-shrink: 0; margin-top: 1px; font-weight: 600; }
 
   /* ── ICP ── */
-  .icp { background: var(--bg); }
+  .icp-section { padding: 120px 0; border-top: 1px solid var(--rule); }
 
-  .icp-intro {
-    font-size: 0.88rem;
-    color: var(--white-dim);
-    font-weight: 300;
-    max-width: 500px;
-    line-height: 1.85;
-    margin-top: 1rem;
+  .icp-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-left: 1px solid var(--rule); margin-top: 72px;
   }
-
-  .icp-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border: 1px solid var(--rule);
-    margin-top: 4rem;
-  }
-
   .icp-card {
-    padding: 2.75rem 2.25rem;
+    padding: 44px 40px;
     border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+    position: relative; transition: background 0.35s;
   }
-  .icp-card:last-child { border-right: none; }
+  .icp-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--teal);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+  }
+  .icp-card:hover { background: var(--lift); }
+  .icp-card:hover::before { transform: scaleX(1); }
 
-  .icp-label {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--white-faint);
-    margin-bottom: 1.25rem;
-  }
-
-  .icp-title {
-    font-family: var(--serif);
-    font-size: 1.3rem;
-    font-style: italic;
-    color: var(--white);
-    margin-bottom: 1rem;
-    line-height: 1.25;
-  }
-
-  .icp-body {
-    font-size: 0.84rem;
-    color: var(--white-dim);
-    line-height: 1.8;
-    font-weight: 300;
-  }
+  .icp-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--faint); letter-spacing: 0.1em; margin-bottom: 28px; display: block; }
+  .icp-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; line-height: 1.2; color: var(--text); margin-bottom: 14px; }
+  .icp-body { font-size: 13px; line-height: 1.85; color: var(--muted); }
 
   /* ── CTA ── */
   .cta-section {
-    background: var(--bg-mid);
-    border-top: 1px solid var(--rule);
-    padding: 9rem 3rem;
+    padding: 160px 0; border-top: 1px solid var(--rule);
+    text-align: center;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,139,152,0.08) 0%, transparent 70%);
   }
-
-  .cta-inner { max-width: 680px; }
-
-  .cta-section h2 {
-    font-size: clamp(2.5rem, 5vw, 4.2rem);
-    margin-bottom: 1.5rem;
-  }
-
-  .cta-desc {
-    font-size: 0.9rem;
-    color: var(--white-dim);
-    font-weight: 300;
-    line-height: 1.9;
-    margin-bottom: 3rem;
-    max-width: 460px;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
+  .cta-section .section-h { max-width: 720px; margin: 0 auto; }
+  .cta-sub { font-size: 16px; line-height: 1.8; color: var(--muted); max-width: 500px; margin: 22px auto 0; }
+  .cta-actions { display: flex; gap: 20px; justify-content: center; margin-top: 52px; flex-wrap: wrap; }
   .cta-email {
-    margin-top: 2rem;
-    font-size: 0.75rem;
-    color: var(--white-faint);
-    font-weight: 300;
+    font-size: 13px; color: var(--faint); letter-spacing: 0.05em;
+    margin-top: 28px; display: block; transition: color 0.2s;
   }
+  .cta-email:hover { color: var(--teal); }
 
   /* ── FOOTER ── */
-  footer {
-    background: var(--bg);
-    padding: 2rem 3rem;
-    border-top: 1px solid var(--rule);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  footer { border-top: 1px solid var(--rule); padding: 44px 0; }
+  .footer-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
   }
-
-  footer p {
-    font-size: 0.72rem;
-    color: var(--white-faint);
-    letter-spacing: 0.04em;
-    font-weight: 300;
+  .footer-copy { font-size: 12px; color: var(--faint); letter-spacing: 0.04em; }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--faint); transition: color 0.2s;
   }
-
-  .footer-logo {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--white-dim);
-    letter-spacing: 0.04em;
-  }
+  .footer-links a:hover { color: var(--teal); }
 
   /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  .hero-eyebrow { animation: fadeUp 0.8s ease both; }
-  .hero-title   { animation: fadeUp 0.8s 0.1s ease both; }
-  .hero-bottom  { animation: fadeUp 0.8s 0.22s ease both; }
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.22s; }
+  .reveal-delay-3 { transition-delay: 0.34s; }
+  .reveal-delay-4 { transition-delay: 0.46s; }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    nav { padding: 1.25rem 1.5rem; }
-    .nav-links { display: none; }
-    .container { padding: 0 1.5rem; }
-    section { padding: 5rem 0; }
-    .hero { padding: 0 1.5rem 4rem; min-height: 70vh; }
-    .hero-bottom { flex-direction: column; align-items: flex-start; }
-    .hero-links { align-items: flex-start; }
-    .phil-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .phil-principles { grid-template-columns: 1fr; }
-    .principle { border-right: none !important; }
+  @media (max-width: 1024px) {
+    .phil-layout { grid-template-columns: 1fr; gap: 48px; }
+    .phil-left { position: static; }
     .process-steps { grid-template-columns: 1fr 1fr; }
-    .step { border-right: none; border-bottom: 1px solid var(--rule); }
-    .step:nth-child(odd) { border-right: 1px solid var(--rule); }
-    .step:last-child { border-bottom: none; }
+  }
+  @media (max-width: 768px) {
+    .process-steps { grid-template-columns: 1fr; }
     .tiers-grid { grid-template-columns: 1fr; }
     .dos-donts { grid-template-columns: 1fr; }
-    .dos { border-right: none; border-bottom: 1px solid var(--rule); }
-    .stats { grid-template-columns: 1fr; }
-    .stat { border-right: none; border-bottom: 1px solid var(--rule); }
-    .stat:last-child { border-bottom: none; }
-    .icp-cards { grid-template-columns: 1fr; }
-    .icp-card { border-right: none; border-bottom: 1px solid var(--rule); }
-    .icp-card:last-child { border-bottom: none; }
-    .section-rule { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
-    .cta-section { padding: 6rem 1.5rem; }
-    footer { flex-direction: column; gap: 1rem; align-items: flex-start; padding: 2rem 1.5rem; }
+    .icp-grid { grid-template-columns: 1fr; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-stats { gap: 28px; }
   }
 </style>
 </head>
 <body>
 
+<div class="cursor"><div class="cursor-dot"></div><div class="cursor-ring"></div></div>
+<div class="ambient"></div>
+
 <!-- ── NAV ── -->
-<nav>
-  <a href="https://2x2partners.com" class="nav-logo">
-    <span class="mark">2»2</span>
-    Partners
-  </a>
-  <ul class="nav-links">
-    <li><a href="#process">Process</a></li>
-    <li><a href="#tiers">Engagement</a></li>
-    <li><a href="#rules">Rules</a></li>
-    <li><a href="#who">Who We Serve</a></li>
-  </ul>
-  <a href="#cta" class="nav-cta">Begin a Conversation →</a>
+<nav id="nav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="https://2x2partners.com" class="logomark">
+        2<span class="chevrons">>></span>2
+        <span class="wordmark">Partners</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#tiers">Engagement</a></li>
+        <li><a href="#rules">Rules</a></li>
+        <li><a href="#who">Who We Serve</a></li>
+      </ul>
+      <a href="#cta" class="nav-cta">Begin a Conversation →</a>
+    </div>
+  </div>
 </nav>
 
 <!-- ── HERO ── -->
 <div class="hero">
-  <p class="hero-eyebrow">Capital Formation · 2x2 Partners</p>
-  <h1 class="hero-title">Capital <em>Catalyst</em>™<br>Capital Raise<br>Acceleration.</h1>
-  <div class="hero-bottom">
-    <p class="hero-desc">We plug into your fundraise as a structural extension of your team — bringing network, process, and judgment to the moments that determine whether a raise succeeds or stalls.</p>
-    <div class="hero-links">
-      <a href="#tiers" class="primary">View Engagement Options →</a>
-      <a href="#process">How It Works →</a>
+  <div class="wrap">
+    <div class="hero-body">
+      <div class="hero-kicker">Capital Formation · 2x2 Partners</div>
+      <h1 class="hero-headline">Capital <em>Catalyst</em>™<br>Capital Raise<br><em>Acceleration.</em></h1>
+      <p class="hero-sub">We plug into your fundraise as a structural extension of your team — bringing network, process, and judgment to the moments that determine whether a raise succeeds or stalls.</p>
+      <div class="hero-actions">
+        <a href="#tiers" class="btn-prim">View Engagement Options</a>
+        <a href="#process" class="btn-ghost">How It Works <span>→</span></a>
+      </div>
+    </div>
+  </div>
+  <hr class="hero-rule">
+  <div class="wrap">
+    <div class="hero-footer">
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-val">$600</div>
+          <div class="hstat-label">Introductions tier</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">30</div>
+          <div class="hstat-label">Days notice to cancel</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">0</div>
+          <div class="hstat-label">Out-of-pocket expenses</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ── PHILOSOPHY ── -->
-<section class="philosophy" id="about">
-  <div class="container">
-    <div class="section-rule">
-      <span><span class="label-num">01</span>Philosophy</span>
-      <span>Capital Formation · 2x2 Partners</span>
-    </div>
-    <div class="phil-grid">
-      <div class="phil-left">
-        <h2>Capital formation<br>is a <em>system,</em><br>not a sprint.</h2>
+<section class="philosophy-section" id="philosophy">
+  <div class="wrap">
+    <div class="section-tag reveal"><span class="num">01</span>Philosophy</div>
+    <h2 class="section-h reveal reveal-delay-1">Capital formation is a <em>system,</em><br>not a sprint.</h2>
+
+    <div class="phil-layout">
+      <div class="phil-left reveal reveal-delay-2">
         <p>Most raises fail not because the company isn't fundable — but because the raise wasn't structured. Introductions happened without context. Meetings lacked follow-through. Investors received information before they were ready for it.</p>
-        <p>At 2x2, we begin every engagement with an assessment. We study your story, your materials, and your network before we make a single introduction. Speed matters — but so does sequence. The right investor at the wrong moment is a missed opportunity.</p>
-        <p>The structural nuances — sequencing, framing, timing, follow-up — are where raises are won or lost. We build those structures for you.</p>
+        <p style="margin-top:16px;">At 2x2, we begin every engagement with an assessment. We study your story, your materials, and your network before we make a single introduction. Speed matters — but so does sequence. The right investor at the wrong moment is a missed opportunity.</p>
+        <p style="margin-top:16px;">The structural nuances — sequencing, framing, timing, follow-up — are where raises are won or lost. We build those structures for you.</p>
       </div>
-      <div class="phil-principles">
-        <div class="principle">
-          <span class="prin-num">01</span>
-          <p class="prin-title">Assessment First</p>
-          <p class="prin-body">We diagnose before we recommend. Alignment precedes outreach. Every engagement starts with a structured intake.</p>
+
+      <div class="principles-grid reveal reveal-delay-3">
+        <div class="principle-item">
+          <span class="p-index">01 — Principle</span>
+          <div class="p-title">Assessment First</div>
+          <p class="p-text">We diagnose before we recommend. Alignment precedes outreach. Every engagement starts with a structured intake.</p>
         </div>
-        <div class="principle">
-          <span class="prin-num">02</span>
-          <p class="prin-title">People Matter</p>
-          <p class="prin-body">Capital is raised by people, not decks. We invest in relationships before we make asks. Quality over volume, always.</p>
+        <div class="principle-item">
+          <span class="p-index">02 — Principle</span>
+          <div class="p-title">People Matter</div>
+          <p class="p-text">Capital is raised by people, not decks. We invest in relationships before we make asks. Quality over volume, always.</p>
         </div>
-        <div class="principle">
-          <span class="prin-num">03</span>
-          <p class="prin-title">Process Matters</p>
-          <p class="prin-body">Structured follow-up, feedback loops, and weekly reporting keep momentum alive and prevent opportunities from going cold.</p>
+        <div class="principle-item">
+          <span class="p-index">03 — Principle</span>
+          <div class="p-title">Process Matters</div>
+          <p class="p-text">Structured follow-up, feedback loops, and weekly reporting keep momentum alive and prevent opportunities from going cold.</p>
         </div>
-        <div class="principle">
-          <span class="prin-num">04</span>
-          <p class="prin-title">Speed Matters</p>
-          <p class="prin-body">Investor sentiment has a shelf life. We move with urgency — treating every warm relationship as time-sensitive until proven otherwise.</p>
+        <div class="principle-item">
+          <span class="p-index">04 — Principle</span>
+          <div class="p-title">Speed Matters</div>
+          <p class="p-text">Investor sentiment has a shelf life. We move with urgency — treating every warm relationship as time-sensitive until proven otherwise.</p>
         </div>
-        <div class="principle" style="grid-column: 1 / -1; border-right: none;">
-          <span class="prin-num">05</span>
-          <p class="prin-title">Collaboration Matters</p>
-          <p class="prin-body">We work alongside your team — not in parallel. Shared pipeline visibility, shared feedback, shared outcomes. We are partners in the result, not consultants who disappear after the intro.</p>
+        <div class="principle-item full">
+          <span class="p-index">05 — Principle</span>
+          <div class="p-title">Collaboration Matters</div>
+          <p class="p-text">We work alongside your team — not in parallel. Shared pipeline visibility, shared feedback, shared outcomes. We are partners in the result, not consultants who disappear after the intro.</p>
         </div>
       </div>
     </div>
@@ -827,32 +638,30 @@
 </section>
 
 <!-- ── PROCESS ── -->
-<section class="process" id="process">
-  <div class="container">
-    <div class="section-rule">
-      <span><span class="label-num">02</span>Process</span>
-      <span>Four steps · One integrated system</span>
-    </div>
-    <h2>How we <em>work</em> with you.</h2>
-    <div class="process-steps">
+<section class="process-section" id="process">
+  <div class="wrap">
+    <div class="section-tag reveal"><span class="num">02</span>Process</div>
+    <h2 class="section-h reveal reveal-delay-1">How we <em>work</em> with you.<br>Four steps. One system.</h2>
+
+    <div class="process-steps reveal reveal-delay-2">
       <div class="step">
         <span class="step-num">01</span>
-        <p class="step-title">Intake &amp; Assessment</p>
+        <div class="step-title">Intake &amp; Assessment</div>
         <p class="step-body">We review your deck, thesis, positioning, and existing relationships. We define your ICP — who the right investor looks like — before outreach begins. Nothing moves until we understand the full picture.</p>
       </div>
       <div class="step">
         <span class="step-num">02</span>
-        <p class="step-title">Targeting &amp; Alignment</p>
+        <div class="step-title">Targeting &amp; Alignment</div>
         <p class="step-body">We map the 2x2 network against your ICP and adapt your messaging for each investor archetype — angels, family offices, fund-of-funds, strategic LPs. Positioning precedes contact.</p>
       </div>
       <div class="step">
         <span class="step-num">03</span>
-        <p class="step-title">Warm Introductions</p>
+        <div class="step-title">Warm Introductions</div>
         <p class="step-body">Curated, contextual introductions — never cold blasts. Each intro is framed to maximize receptivity and signal alignment. We prioritize relationship quality over outreach volume.</p>
       </div>
       <div class="step">
         <span class="step-num">04</span>
-        <p class="step-title">Track, Report &amp; Refine</p>
+        <div class="step-title">Track, Report &amp; Refine</div>
         <p class="step-body">Weekly updates on pipeline, investor sentiment, and next steps. Feedback is synthesized and integrated back into positioning in real time. The raise improves as it runs.</p>
       </div>
     </div>
@@ -860,101 +669,97 @@
 </section>
 
 <!-- ── PULL QUOTE ── -->
-<div class="pull">
-  <div class="pull-inner">
-    <p class="pull-quote">"The right investor at the wrong moment is just another missed opportunity. Sequencing is everything."</p>
-    <p class="pull-attr">— Capital Catalyst™ · 2x2 Partners</p>
-  </div>
-</div>
-
-<!-- ── TIERS ── -->
-<section class="tiers" id="tiers">
-  <div class="container">
-    <div class="section-rule">
-      <span><span class="label-num">03</span>Engagement Options</span>
-      <span>Two models · One capital formation system</span>
-    </div>
-    <h2>Choose your <em>level of support.</em></h2>
-    <p class="tiers-intro">One model for founders who want qualified meetings. One for founders who want us to own the entire process from introduction to close.</p>
-
-    <div class="tiers-grid">
-
-      <!-- Tier 1 -->
-      <div class="tier">
-        <div class="tier-tag">Introductions</div>
-        <p class="tier-name">Catalyst<br><em>Introductions</em></p>
-        <div class="tier-price">
-          <span class="price-num">$600</span>
-          <span class="price-unit">/ month</span>
-        </div>
-        <p class="tier-desc">We handle investor targeting, messaging alignment, and warm introductions. Your team manages scheduling and follow-up. Cancel anytime with 30 days' notice.</p>
-        <ul class="tier-features">
-          <li><span class="li-mark">◆</span>Intake assessment &amp; ICP definition</li>
-          <li><span class="li-mark">◆</span>Investor targeting &amp; messaging alignment</li>
-          <li><span class="li-mark">◆</span>Curated warm introductions from 2x2 network</li>
-          <li><span class="li-mark">◆</span>Weekly pipeline status reports</li>
-          <li><span class="li-mark">◆</span>Investor feedback capture &amp; synthesis</li>
-          <li><span class="li-mark">◆</span>Non-exclusive — you retain full control</li>
-          <li><span class="li-mark">◆</span>Cancelable with 30 days' written notice</li>
-        </ul>
-        <a href="#cta" class="btn btn-outline">Begin Engagement →</a>
-      </div>
-
-      <!-- Tier 2 -->
-      <div class="tier featured">
-        <div class="tier-tag">Full-Service</div>
-        <p class="tier-name">Catalyst<br><em>Complete</em></p>
-        <div class="tier-price">
-          <span class="price-num" style="font-size:2rem;">Custom</span>
-          <span class="price-unit">/ engagement</span>
-        </div>
-        <p class="tier-desc">We own the full raise cycle — from investor identification and scheduling through presenting, follow-up management, and supporting close. Built for founders who want to stay heads-down on building.</p>
-        <ul class="tier-features">
-          <li><span class="li-mark">◆</span>Everything in Catalyst Introductions</li>
-          <li><span class="li-mark">◆</span>Meeting scheduling &amp; logistics managed by 2x2</li>
-          <li><span class="li-mark">◆</span>2x2 presents to investors on your behalf</li>
-          <li><span class="li-mark">◆</span>Full follow-up management &amp; investor nurture</li>
-          <li><span class="li-mark">◆</span>Closing support &amp; term sheet guidance</li>
-          <li><span class="li-mark">◆</span>Defined monthly meeting targets &amp; commitments</li>
-          <li><span class="li-mark">◆</span>Structured engagement milestones</li>
-        </ul>
-        <a href="#cta" class="btn btn-light">Schedule a Conversation →</a>
-      </div>
-
-    </div>
-
-    <p class="tiers-footnote">All engagements begin with a complimentary assessment. 2x2 Partners acts as a strategic introducer only — not a registered broker-dealer. Engagements are non-exclusive and strictly confidential.</p>
-
-    <div class="stats">
-      <div class="stat">
-        <span class="stat-num">$600</span>
-        <span class="stat-label">Monthly — Introductions Tier</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">30</span>
-        <span class="stat-label">Days notice to cancel — anytime</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">0</span>
-        <span class="stat-label">Anticipated out-of-pocket expenses</span>
-      </div>
+<section class="pull-section">
+  <div class="wrap">
+    <div class="pull-inner reveal">
+      <p class="pull-quote">"The right investor at the wrong moment is just another missed opportunity. Sequencing is everything."</p>
+      <p class="pull-attr">Capital Catalyst™ · 2x2 Partners</p>
     </div>
   </div>
 </section>
 
-<!-- ── RULES OF ENGAGEMENT ── -->
-<section class="rules" id="rules">
-  <div class="container">
-    <div class="section-rule">
-      <span><span class="label-num">04</span>Rules of Engagement</span>
-      <span>Structural nuances · Short, mid, and long-term advantage</span>
-    </div>
-    <h2>How we <em>operate.</em></h2>
-    <p class="rules-lead">Capital formation is a relationship business governed by structural rules. Understanding these rules — and following them with discipline — creates durable advantages across the arc of every raise.</p>
+<!-- ── TIERS ── -->
+<section class="tiers-section" id="tiers">
+  <div class="wrap">
+    <div class="section-tag reveal"><span class="num">03</span>Engagement Options</div>
+    <h2 class="section-h reveal reveal-delay-1">Choose your <em>level</em><br>of support.</h2>
+    <p class="tiers-intro reveal reveal-delay-2">One model for founders who want qualified meetings. One for founders who want us to own the entire process from introduction to close.</p>
 
-    <div class="dos-donts">
+    <div class="tiers-grid reveal reveal-delay-3">
+
+      <!-- Tier 1 -->
+      <div class="tier">
+        <div class="tier-badge">Introductions</div>
+        <div class="tier-name">Catalyst<br><em>Introductions</em></div>
+        <div class="tier-price">
+          <span class="price-val">$600</span>
+          <span class="price-unit">/ month</span>
+        </div>
+        <p class="tier-desc">We handle investor targeting, messaging alignment, and warm introductions. Your team manages scheduling and follow-up. Cancel anytime with 30 days' notice.</p>
+        <ul class="tier-features">
+          <li>Intake assessment &amp; ICP definition</li>
+          <li>Investor targeting &amp; messaging alignment</li>
+          <li>Curated warm introductions from 2x2 network</li>
+          <li>Weekly pipeline status reports</li>
+          <li>Investor feedback capture &amp; synthesis</li>
+          <li>Non-exclusive — you retain full control</li>
+          <li>Cancelable with 30 days' written notice</li>
+        </ul>
+        <a href="#cta" class="btn-ghost">Begin Engagement <span>→</span></a>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="tier featured">
+        <div class="tier-badge">Full-Service</div>
+        <div class="tier-name">Catalyst<br><em>Complete</em></div>
+        <div class="tier-price">
+          <span class="price-val" style="font-size:36px;font-style:italic;">Custom</span>
+          <span class="price-unit">/ engagement</span>
+        </div>
+        <p class="tier-desc">We own the full raise cycle — from investor identification and scheduling through presenting, follow-up management, and supporting close. Built for founders who want to stay heads-down on building.</p>
+        <ul class="tier-features">
+          <li>Everything in Catalyst Introductions</li>
+          <li>Meeting scheduling &amp; logistics managed by 2x2</li>
+          <li>2x2 presents to investors on your behalf</li>
+          <li>Full follow-up management &amp; investor nurture</li>
+          <li>Closing support &amp; term sheet guidance</li>
+          <li>Defined monthly meeting targets &amp; commitments</li>
+          <li>Structured engagement milestones</li>
+        </ul>
+        <a href="#cta" class="btn-prim">Schedule a Conversation</a>
+      </div>
+
+    </div>
+
+    <div class="stats-bar reveal reveal-delay-1">
+      <div class="stat-item">
+        <span class="stat-val">$600</span>
+        <span class="stat-label">Monthly — Introductions Tier</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">30</span>
+        <span class="stat-label">Days notice to cancel — anytime</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">0</span>
+        <span class="stat-label">Anticipated out-of-pocket expenses</span>
+      </div>
+    </div>
+
+    <p class="tiers-footnote reveal">All engagements begin with a complimentary assessment. 2x2 Partners acts as a strategic introducer only — not a registered broker-dealer. Engagements are non-exclusive and strictly confidential.</p>
+  </div>
+</section>
+
+<!-- ── RULES ── -->
+<section class="rules-section" id="rules">
+  <div class="wrap">
+    <div class="section-tag reveal"><span class="num">04</span>Rules of Engagement</div>
+    <h2 class="section-h reveal reveal-delay-1">How we <em>operate.</em></h2>
+    <p class="rules-lead reveal reveal-delay-2">Capital formation is a relationship business governed by structural rules. Understanding these rules — and following them with discipline — creates durable advantages across the arc of every raise.</p>
+
+    <div class="dos-donts reveal reveal-delay-3">
       <div class="dos">
-        <p class="col-head">What we do</p>
+        <div class="col-head">What we do</div>
         <ul>
           <li><span class="do-mark">→</span>Sequence introductions by relationship warmth and investor readiness</li>
           <li><span class="do-mark">→</span>Tailor context for each investor archetype before the first touch</li>
@@ -967,7 +772,7 @@
         </ul>
       </div>
       <div class="donts">
-        <p class="col-head">What we don't do</p>
+        <div class="col-head">What we don't do</div>
         <ul>
           <li><span class="dont-mark">×</span>Blast introductions to unvetted lists without context or framing</li>
           <li><span class="dont-mark">×</span>Prioritize volume over relationship quality or strategic fit</li>
@@ -983,28 +788,26 @@
 </section>
 
 <!-- ── WHO WE SERVE ── -->
-<section class="icp" id="who">
-  <div class="container">
-    <div class="section-rule">
-      <span><span class="label-num">05</span>Who We Serve</span>
-      <span>Selective · Aligned · Long-term orientation</span>
-    </div>
-    <h2>The right <em>partners.</em></h2>
-    <p class="icp-intro">Access to the Capital Catalyst™ service is selective. We work with a limited number of engagements at any given time to maintain quality across each relationship.</p>
-    <div class="icp-cards">
+<section class="icp-section" id="who">
+  <div class="wrap">
+    <div class="section-tag reveal"><span class="num">05</span>Who We Serve</div>
+    <h2 class="section-h reveal reveal-delay-1">The right <em>partners.</em></h2>
+    <p class="section-body reveal reveal-delay-2">Access to the Capital Catalyst™ service is selective. We work with a limited number of engagements at any given time to maintain quality across each relationship.</p>
+
+    <div class="icp-grid reveal reveal-delay-3">
       <div class="icp-card">
-        <p class="icp-label">01 — Fund Managers</p>
-        <p class="icp-title">Emerging GPs</p>
+        <span class="icp-num">01</span>
+        <div class="icp-title">Emerging GPs</div>
         <p class="icp-body">Pre-seed and seed managers raising their first or second institutional vehicle. Deep domain expertise, mission clarity — and capital network gaps we can close with precision.</p>
       </div>
       <div class="icp-card">
-        <p class="icp-label">02 — Operating Companies</p>
-        <p class="icp-title">Growth-Stage Companies</p>
+        <span class="icp-num">02</span>
+        <div class="icp-title">Growth-Stage Companies</div>
         <p class="icp-body">Venture-backed companies with demonstrated traction seeking strategic LP or late-stage growth capital from family offices and high-net-worth individuals within the 2x2 network.</p>
       </div>
       <div class="icp-card">
-        <p class="icp-label">03 — Mission-Led Founders</p>
-        <p class="icp-title">Operators at the Frontier</p>
+        <span class="icp-num">03</span>
+        <div class="icp-title">Operators at the Frontier</div>
         <p class="icp-body">Builders working at the intersection of data, AI, and human experience — where investor alignment around mission and thesis is as important as capital size and terms.</p>
       </div>
     </div>
@@ -1013,27 +816,66 @@
 
 <!-- ── CTA ── -->
 <section class="cta-section" id="cta">
-  <div class="container">
-    <div class="cta-inner">
-      <div class="section-rule">
-        <span><span class="label-num">06</span>Start Here</span>
-      </div>
-      <h2>If you are ready to raise — <em>this is where the conversation begins.</em></h2>
-      <p class="cta-desc">Every engagement begins with a complimentary assessment. No commitment, no pitch — just a structured conversation about what you're building and how we can help you raise for it.</p>
-      <div class="cta-buttons">
-        <a href="mailto:rnizielski@2x2partners.com?subject=Capital%20Catalyst%E2%84%A2%20%E2%80%94%20Assessment%20Request" class="btn btn-light">Request an Assessment</a>
-        <a href="#tiers" class="btn btn-outline">Review Engagement Options →</a>
-      </div>
-      <p class="cta-email">rnizielski@2x2partners.com</p>
+  <div class="wrap">
+    <div class="section-tag reveal" style="justify-content:center;"><span class="num">06</span>Start Here</div>
+    <h2 class="section-h reveal reveal-delay-1">If you are ready to raise —<br><em>this is where it begins.</em></h2>
+    <p class="cta-sub reveal reveal-delay-2">Every engagement begins with a complimentary assessment. No commitment, no pitch — just a structured conversation about what you're building and how we can help you raise for it.</p>
+    <div class="cta-actions reveal reveal-delay-3">
+      <a href="mailto:rnizielski@2x2partners.com?subject=Capital%20Catalyst%E2%84%A2%20%E2%80%94%20Assessment%20Request" class="btn-prim">Request an Assessment</a>
+      <a href="#tiers" class="btn-ghost">Review Engagement Options <span>→</span></a>
     </div>
+    <a href="mailto:rnizielski@2x2partners.com" class="cta-email reveal">rnizielski@2x2partners.com</a>
   </div>
 </section>
 
 <!-- ── FOOTER ── -->
 <footer>
-  <p>© 2026 Alt Investments LLC dba 2x2 Partners. All rights reserved. Capital Catalyst™ is a proprietary service mark. Growth · Capital · Investment.</p>
-  <span class="footer-logo">2»2</span>
+  <div class="wrap">
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 Alt Investments LLC dba 2x2 Partners. All rights reserved. Capital Catalyst™ is a proprietary service mark.</p>
+      <div class="footer-links">
+        <a href="#philosophy">Philosophy</a>
+        <a href="#process">Process</a>
+        <a href="#tiers">Engagement</a>
+        <a href="https://2x2partners.com">Home</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
+<script>
+  // ── CURSOR ──
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function animCursor() {
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a, button, .tier, .step, .icp-card, .principle-item').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  // ── NAV SCROLL ──
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ── REVEAL ON SCROLL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
