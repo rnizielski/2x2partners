@@ -1,1 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Catalyst™ — 2x2 Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --bg:          #0A0A09;
+    --bg-mid:      #111110;
+    --bg-card:     #161614;
+    --white:       #F4F2EE;
+    --white-dim:   rgba(244,242,238,0.55);
+    --white-faint: rgba(244,242,238,0.18);
+    --rule:        rgba(244,242,238,0.1);
+    --rule-mid:    rgba(244,242,238,0.06);
+    --tag:         rgba(244,242,238,0.07);
+    --serif:       'DM Serif Display', Georgia, serif;
+    --sans:        'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--white);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.6rem 3rem;
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .nav-logo .mark {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--white-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid var(--rule-mid);
+    padding: 0.5rem 1.25rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .nav-cta:hover { border-color: rgba(244,242,238,0.3); background: var(--tag); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 3rem; }
+
+  section { padding: 8rem 0; }
+
+  .section-rule {
+    border-top: 1px solid var(--rule);
+    margin-bottom: 5rem;
+    padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-rule span {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white-faint);
+  }
+
+  .label-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--white-faint);
+    margin-right: 0.5rem;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--white);
+  }
+
+  h2 em {
+    font-style: italic;
+    color: rgba(244,242,238,0.7);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 3rem 6rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-bottom: 2rem;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    max-width: 900px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: rgba(244,242,238,0.6);
+  }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 4rem;
+    gap: 3rem;
+  }
+
+  .hero-desc {
+    font-size: 0.92rem;
+    color: var(--white-dim);
+    line-height: 1.85;
+    max-width: 420px;
+    font-weight: 300;
+  }
+
+  .hero-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .hero-links a {
+    font-size: 0.82rem;
+    color: var(--white-dim);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .hero-links a:hover { color: var(--white); }
+  .hero-links a.primary {
+    color: var(--white);
+    border-bottom: 1px solid rgba(244,242,238,0.25);
+    padding-bottom: 0.1rem;
+  }
+
+  /* ── PHILOSOPHY ── */
+  .philosophy { background: var(--bg); }
+
+  .phil-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+
+  .phil-left p {
+    font-size: 0.9rem;
+    color: var(--white-dim);
+    line-height: 1.9;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .phil-principles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+  }
+
+  .principle {
+    padding: 2rem;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  .principle:nth-child(even) { border-right: none; }
+  .principle:nth-last-child(-n+2) { border-bottom: none; }
+
+  .prin-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--white-faint);
+    display: block;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+  }
+
+  .prin-title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .prin-body {
+    font-size: 0.82rem;
+    color: var(--white-dim);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* ── PROCESS ── */
+  .process {
+    background: var(--bg-mid);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--rule);
+    margin-top: 4rem;
+  }
+
+  .step {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--rule);
+  }
+  .step:last-child { border-right: none; }
+
+  .step-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 2.5rem;
+    color: var(--white-faint);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .step-title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .step-body {
+    font-size: 0.82rem;
+    color: var(--white-dim);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── PULL QUOTE ── */
+  .pull {
+    background: var(--bg);
+    padding: 7rem 3rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .pull-inner {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(244,242,238,0.65);
+    line-height: 1.35;
+    margin-bottom: 2rem;
+  }
+
+  .pull-attr {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white-faint);
+    font-weight: 400;
+  }
+
+  /* ── TIERS ── */
+  .tiers { background: var(--bg); }
+
+  .tiers-intro {
+    font-size: 0.88rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.85;
+    margin-top: 1rem;
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .tier {
+    border: 1px solid var(--rule);
+    padding: 3rem 2.75rem;
+    background: var(--bg-card);
+    transition: border-color 0.25s;
+  }
+  .tier:hover { border-color: rgba(244,242,238,0.22); }
+
+  .tier.featured {
+    border-color: rgba(244,242,238,0.2);
+    background: #1A1A17;
+  }
+
+  .tier-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    border: 1px solid var(--rule);
+    padding: 0.2rem 0.75rem;
+    margin-bottom: 2rem;
+    background: var(--tag);
+  }
+
+  .tier-name {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+
+  .tier-name em {
+    font-style: italic;
+    color: rgba(244,242,238,0.6);
+  }
+
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .price-num {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .price-unit {
+    font-size: 0.8rem;
+    color: var(--white-dim);
+    font-weight: 300;
+  }
+
+  .tier-desc {
+    font-size: 0.86rem;
+    color: var(--white-dim);
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule-mid);
+  }
+
+  .tier-features {
+    list-style: none;
+    margin-bottom: 2.5rem;
+  }
+
+  .tier-features li {
+    font-size: 0.84rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--rule-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    line-height: 1.55;
+  }
+  .tier-features li:last-child { border-bottom: none; }
+
+  .li-mark {
+    color: rgba(244,242,238,0.3);
+    font-size: 0.6rem;
+    margin-top: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 2rem;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-light {
+    background: var(--white);
+    color: var(--bg);
+    border: 1px solid var(--white);
+  }
+  .btn-light:hover { background: rgba(244,242,238,0.88); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white-dim);
+    border: 1px solid var(--rule);
+  }
+  .btn-outline:hover { border-color: rgba(244,242,238,0.3); color: var(--white); }
+
+  /* ── STATS ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--rule);
+    margin-top: 5rem;
+  }
+
+  .stat {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-style: italic;
+    color: var(--white);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white-faint);
+    font-weight: 300;
+  }
+
+  .tiers-footnote {
+    margin-top: 1.75rem;
+    font-size: 0.72rem;
+    color: var(--white-faint);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── RULES OF ENGAGEMENT ── */
+  .rules {
+    background: var(--bg-mid);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .rules-lead {
+    font-size: 0.95rem;
+    color: var(--white-dim);
+    line-height: 1.9;
+    font-weight: 300;
+    max-width: 600px;
+    margin-top: 1rem;
+  }
+
+  .dos-donts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-top: 4rem;
+  }
+
+  .dos { border-right: 1px solid var(--rule); }
+
+  .dos,
+  .donts { padding: 2.75rem; }
+
+  .col-head {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule-mid);
+  }
+
+  .dos ul,
+  .donts ul { list-style: none; }
+
+  .dos li,
+  .donts li {
+    font-size: 0.86rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--rule-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    line-height: 1.6;
+  }
+  .dos li:last-child,
+  .donts li:last-child { border-bottom: none; }
+
+  .do-mark {
+    color: rgba(244,242,238,0.5);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    margin-top: 0.3rem;
+  }
+  .dont-mark {
+    color: rgba(244,242,238,0.15);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    margin-top: 0.3rem;
+  }
+
+  /* ── ICP ── */
+  .icp { background: var(--bg); }
+
+  .icp-intro {
+    font-size: 0.88rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.85;
+    margin-top: 1rem;
+  }
+
+  .icp-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-top: 4rem;
+  }
+
+  .icp-card {
+    padding: 2.75rem 2.25rem;
+    border-right: 1px solid var(--rule);
+  }
+  .icp-card:last-child { border-right: none; }
+
+  .icp-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white-faint);
+    margin-bottom: 1.25rem;
+  }
+
+  .icp-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--white);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+  }
+
+  .icp-body {
+    font-size: 0.84rem;
+    color: var(--white-dim);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--bg-mid);
+    border-top: 1px solid var(--rule);
+    padding: 9rem 3rem;
+  }
+
+  .cta-inner { max-width: 680px; }
+
+  .cta-section h2 {
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-desc {
+    font-size: 0.9rem;
+    color: var(--white-dim);
+    font-weight: 300;
+    line-height: 1.9;
+    margin-bottom: 3rem;
+    max-width: 460px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-email {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    color: var(--white-faint);
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p {
+    font-size: 0.72rem;
+    color: var(--white-faint);
+    letter-spacing: 0.04em;
+    font-weight: 300;
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--white-dim);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.8s ease both; }
+  .hero-title   { animation: fadeUp 0.8s 0.1s ease both; }
+  .hero-bottom  { animation: fadeUp 0.8s 0.22s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1.5rem; }
+    section { padding: 5rem 0; }
+    .hero { padding: 0 1.5rem 4rem; min-height: 70vh; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; }
+    .hero-links { align-items: flex-start; }
+    .phil-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .phil-principles { grid-template-columns: 1fr; }
+    .principle { border-right: none !important; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .step { border-right: none; border-bottom: 1px solid var(--rule); }
+    .step:nth-child(odd) { border-right: 1px solid var(--rule); }
+    .step:last-child { border-bottom: none; }
+    .tiers-grid { grid-template-columns: 1fr; }
+    .dos-donts { grid-template-columns: 1fr; }
+    .dos { border-right: none; border-bottom: 1px solid var(--rule); }
+    .stats { grid-template-columns: 1fr; }
+    .stat { border-right: none; border-bottom: 1px solid var(--rule); }
+    .stat:last-child { border-bottom: none; }
+    .icp-cards { grid-template-columns: 1fr; }
+    .icp-card { border-right: none; border-bottom: 1px solid var(--rule); }
+    .icp-card:last-child { border-bottom: none; }
+    .section-rule { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+    .cta-section { padding: 6rem 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="https://2x2partners.com" class="nav-logo">
+    <span class="mark">2»2</span>
+    Partners
+  </a>
+  <ul class="nav-links">
+    <li><a href="#process">Process</a></li>
+    <li><a href="#tiers">Engagement</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#who">Who We Serve</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Begin a Conversation →</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <p class="hero-eyebrow">Capital Formation · 2x2 Partners</p>
+  <h1 class="hero-title">Capital <em>Catalyst</em>™<br>Capital Raise<br>Acceleration.</h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">We plug into your fundraise as a structural extension of your team — bringing network, process, and judgment to the moments that determine whether a raise succeeds or stalls.</p>
+    <div class="hero-links">
+      <a href="#tiers" class="primary">View Engagement Options →</a>
+      <a href="#process">How It Works →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── PHILOSOPHY ── -->
+<section class="philosophy" id="about">
+  <div class="container">
+    <div class="section-rule">
+      <span><span class="label-num">01</span>Philosophy</span>
+      <span>Capital Formation · 2x2 Partners</span>
+    </div>
+    <div class="phil-grid">
+      <div class="phil-left">
+        <h2>Capital formation<br>is a <em>system,</em><br>not a sprint.</h2>
+        <p>Most raises fail not because the company isn't fundable — but because the raise wasn't structured. Introductions happened without context. Meetings lacked follow-through. Investors received information before they were ready for it.</p>
+        <p>At 2x2, we begin every engagement with an assessment. We study your story, your materials, and your network before we make a single introduction. Speed matters — but so does sequence. The right investor at the wrong moment is a missed opportunity.</p>
+        <p>The structural nuances — sequencing, framing, timing, follow-up — are where raises are won or lost. We build those structures for you.</p>
+      </div>
+      <div class="phil-principles">
+        <div class="principle">
+          <span class="prin-num">01</span>
+          <p class="prin-title">Assessment First</p>
+          <p class="prin-body">We diagnose before we recommend. Alignment precedes outreach. Every engagement starts with a structured intake.</p>
+        </div>
+        <div class="principle">
+          <span class="prin-num">02</span>
+          <p class="prin-title">People Matter</p>
+          <p class="prin-body">Capital is raised by people, not decks. We invest in relationships before we make asks. Quality over volume, always.</p>
+        </div>
+        <div class="principle">
+          <span class="prin-num">03</span>
+          <p class="prin-title">Process Matters</p>
+          <p class="prin-body">Structured follow-up, feedback loops, and weekly reporting keep momentum alive and prevent opportunities from going cold.</p>
+        </div>
+        <div class="principle">
+          <span class="prin-num">04</span>
+          <p class="prin-title">Speed Matters</p>
+          <p class="prin-body">Investor sentiment has a shelf life. We move with urgency — treating every warm relationship as time-sensitive until proven otherwise.</p>
+        </div>
+        <div class="principle" style="grid-column: 1 / -1; border-right: none;">
+          <span class="prin-num">05</span>
+          <p class="prin-title">Collaboration Matters</p>
+          <p class="prin-body">We work alongside your team — not in parallel. Shared pipeline visibility, shared feedback, shared outcomes. We are partners in the result, not consultants who disappear after the intro.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESS ── -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="section-rule">
+      <span><span class="label-num">02</span>Process</span>
+      <span>Four steps · One integrated system</span>
+    </div>
+    <h2>How we <em>work</em> with you.</h2>
+    <div class="process-steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <p class="step-title">Intake &amp; Assessment</p>
+        <p class="step-body">We review your deck, thesis, positioning, and existing relationships. We define your ICP — who the right investor looks like — before outreach begins. Nothing moves until we understand the full picture.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <p class="step-title">Targeting &amp; Alignment</p>
+        <p class="step-body">We map the 2x2 network against your ICP and adapt your messaging for each investor archetype — angels, family offices, fund-of-funds, strategic LPs. Positioning precedes contact.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <p class="step-title">Warm Introductions</p>
+        <p class="step-body">Curated, contextual introductions — never cold blasts. Each intro is framed to maximize receptivity and signal alignment. We prioritize relationship quality over outreach volume.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <p class="step-title">Track, Report &amp; Refine</p>
+        <p class="step-body">Weekly updates on pipeline, investor sentiment, and next steps. Feedback is synthesized and integrated back into positioning in real time. The raise improves as it runs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PULL QUOTE ── -->
+<div class="pull">
+  <div class="pull-inner">
+    <p class="pull-quote">"The right investor at the wrong moment is just another missed opportunity. Sequencing is everything."</p>
+    <p class="pull-attr">— Capital Catalyst™ · 2x2 Partners</p>
+  </div>
+</div>
+
+<!-- ── TIERS ── -->
+<section class="tiers" id="tiers">
+  <div class="container">
+    <div class="section-rule">
+      <span><span class="label-num">03</span>Engagement Options</span>
+      <span>Two models · One capital formation system</span>
+    </div>
+    <h2>Choose your <em>level of support.</em></h2>
+    <p class="tiers-intro">One model for founders who want qualified meetings. One for founders who want us to own the entire process from introduction to close.</p>
+
+    <div class="tiers-grid">
+
+      <!-- Tier 1 -->
+      <div class="tier">
+        <div class="tier-tag">Introductions</div>
+        <p class="tier-name">Catalyst<br><em>Introductions</em></p>
+        <div class="tier-price">
+          <span class="price-num">$600</span>
+          <span class="price-unit">/ month</span>
+        </div>
+        <p class="tier-desc">We handle investor targeting, messaging alignment, and warm introductions. Your team manages scheduling and follow-up. Cancel anytime with 30 days' notice.</p>
+        <ul class="tier-features">
+          <li><span class="li-mark">◆</span>Intake assessment &amp; ICP definition</li>
+          <li><span class="li-mark">◆</span>Investor targeting &amp; messaging alignment</li>
+          <li><span class="li-mark">◆</span>Curated warm introductions from 2x2 network</li>
+          <li><span class="li-mark">◆</span>Weekly pipeline status reports</li>
+          <li><span class="li-mark">◆</span>Investor feedback capture &amp; synthesis</li>
+          <li><span class="li-mark">◆</span>Non-exclusive — you retain full control</li>
+          <li><span class="li-mark">◆</span>Cancelable with 30 days' written notice</li>
+        </ul>
+        <a href="#cta" class="btn btn-outline">Begin Engagement →</a>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="tier featured">
+        <div class="tier-tag">Full-Service</div>
+        <p class="tier-name">Catalyst<br><em>Complete</em></p>
+        <div class="tier-price">
+          <span class="price-num" style="font-size:2rem;">Custom</span>
+          <span class="price-unit">/ engagement</span>
+        </div>
+        <p class="tier-desc">We own the full raise cycle — from investor identification and scheduling through presenting, follow-up management, and supporting close. Built for founders who want to stay heads-down on building.</p>
+        <ul class="tier-features">
+          <li><span class="li-mark">◆</span>Everything in Catalyst Introductions</li>
+          <li><span class="li-mark">◆</span>Meeting scheduling &amp; logistics managed by 2x2</li>
+          <li><span class="li-mark">◆</span>2x2 presents to investors on your behalf</li>
+          <li><span class="li-mark">◆</span>Full follow-up management &amp; investor nurture</li>
+          <li><span class="li-mark">◆</span>Closing support &amp; term sheet guidance</li>
+          <li><span class="li-mark">◆</span>Defined monthly meeting targets &amp; commitments</li>
+          <li><span class="li-mark">◆</span>Structured engagement milestones</li>
+        </ul>
+        <a href="#cta" class="btn btn-light">Schedule a Conversation →</a>
+      </div>
+
+    </div>
+
+    <p class="tiers-footnote">All engagements begin with a complimentary assessment. 2x2 Partners acts as a strategic introducer only — not a registered broker-dealer. Engagements are non-exclusive and strictly confidential.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">$600</span>
+        <span class="stat-label">Monthly — Introductions Tier</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">30</span>
+        <span class="stat-label">Days notice to cancel — anytime</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Anticipated out-of-pocket expenses</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RULES OF ENGAGEMENT ── -->
+<section class="rules" id="rules">
+  <div class="container">
+    <div class="section-rule">
+      <span><span class="label-num">04</span>Rules of Engagement</span>
+      <span>Structural nuances · Short, mid, and long-term advantage</span>
+    </div>
+    <h2>How we <em>operate.</em></h2>
+    <p class="rules-lead">Capital formation is a relationship business governed by structural rules. Understanding these rules — and following them with discipline — creates durable advantages across the arc of every raise.</p>
+
+    <div class="dos-donts">
+      <div class="dos">
+        <p class="col-head">What we do</p>
+        <ul>
+          <li><span class="do-mark">→</span>Sequence introductions by relationship warmth and investor readiness</li>
+          <li><span class="do-mark">→</span>Tailor context for each investor archetype before the first touch</li>
+          <li><span class="do-mark">→</span>Maintain a living pipeline with real-time status and sentiment tracking</li>
+          <li><span class="do-mark">→</span>Synthesize investor feedback and feed it back into your positioning</li>
+          <li><span class="do-mark">→</span>Move with urgency — investor sentiment has a shelf life</li>
+          <li><span class="do-mark">→</span>Treat every relationship as a long-term asset, not a transaction</li>
+          <li><span class="do-mark">→</span>Maintain strict confidentiality across all materials and conversations</li>
+          <li><span class="do-mark">→</span>Comply fully with regulatory requirements at every stage</li>
+        </ul>
+      </div>
+      <div class="donts">
+        <p class="col-head">What we don't do</p>
+        <ul>
+          <li><span class="dont-mark">×</span>Blast introductions to unvetted lists without context or framing</li>
+          <li><span class="dont-mark">×</span>Prioritize volume over relationship quality or strategic fit</li>
+          <li><span class="dont-mark">×</span>Introduce the same investor to conflicting opportunities</li>
+          <li><span class="dont-mark">×</span>Let pipeline go stale — every open thread has an owner and a next step</li>
+          <li><span class="dont-mark">×</span>Make promises about outcomes we can't control</li>
+          <li><span class="dont-mark">×</span>Work in isolation from your team — transparency is non-negotiable</li>
+          <li><span class="dont-mark">×</span>Skip the assessment — we don't introduce before we understand</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO WE SERVE ── -->
+<section class="icp" id="who">
+  <div class="container">
+    <div class="section-rule">
+      <span><span class="label-num">05</span>Who We Serve</span>
+      <span>Selective · Aligned · Long-term orientation</span>
+    </div>
+    <h2>The right <em>partners.</em></h2>
+    <p class="icp-intro">Access to the Capital Catalyst™ service is selective. We work with a limited number of engagements at any given time to maintain quality across each relationship.</p>
+    <div class="icp-cards">
+      <div class="icp-card">
+        <p class="icp-label">01 — Fund Managers</p>
+        <p class="icp-title">Emerging GPs</p>
+        <p class="icp-body">Pre-seed and seed managers raising their first or second institutional vehicle. Deep domain expertise, mission clarity — and capital network gaps we can close with precision.</p>
+      </div>
+      <div class="icp-card">
+        <p class="icp-label">02 — Operating Companies</p>
+        <p class="icp-title">Growth-Stage Companies</p>
+        <p class="icp-body">Venture-backed companies with demonstrated traction seeking strategic LP or late-stage growth capital from family offices and high-net-worth individuals within the 2x2 network.</p>
+      </div>
+      <div class="icp-card">
+        <p class="icp-label">03 — Mission-Led Founders</p>
+        <p class="icp-title">Operators at the Frontier</p>
+        <p class="icp-body">Builders working at the intersection of data, AI, and human experience — where investor alignment around mission and thesis is as important as capital size and terms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="section-rule">
+        <span><span class="label-num">06</span>Start Here</span>
+      </div>
+      <h2>If you are ready to raise — <em>this is where the conversation begins.</em></h2>
+      <p class="cta-desc">Every engagement begins with a complimentary assessment. No commitment, no pitch — just a structured conversation about what you're building and how we can help you raise for it.</p>
+      <div class="cta-buttons">
+        <a href="mailto:rnizielski@2x2partners.com?subject=Capital%20Catalyst%E2%84%A2%20%E2%80%94%20Assessment%20Request" class="btn btn-light">Request an Assessment</a>
+        <a href="#tiers" class="btn btn-outline">Review Engagement Options →</a>
+      </div>
+      <p class="cta-email">rnizielski@2x2partners.com</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2026 Alt Investments LLC dba 2x2 Partners. All rights reserved. Capital Catalyst™ is a proprietary service mark. Growth · Capital · Investment.</p>
+  <span class="footer-logo">2»2</span>
+</footer>
+
+</body>
+</html>
