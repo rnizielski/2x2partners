@@ -286,8 +286,8 @@
       max-width: 560px; margin-top: 22px; font-weight: 400;
     }
 
-    /* ── SERVICES ── */
-    .services-grid {
+    /* ── Growth Infrastructure ── */
+    .Growth Infrastructure-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       border-left: 1px solid var(--rule);
