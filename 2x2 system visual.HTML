@@ -4,36 +4,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2x2 Partners — System Architecture</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black: #080807;
-  --surface: #101010;
-  --card: #141413;
-  --border: rgba(255,255,255,0.07);
-  --gold: #c49a2a;
-  --gold-light: #e0b84a;
-  --gold-dim: rgba(196,154,42,0.12);
-  --gold-glow: rgba(196,154,42,0.06);
-  --white: #f4f1eb;
-  --muted: rgba(244,241,235,0.45);
-  --faint: rgba(244,241,235,0.18);
+  --ink:          #09090b;
+  --ink-deep:     #050507;
+  --surface:      #0f0f12;
+  --lift:         rgba(255,255,255,0.032);
+  --lift-2:       rgba(255,255,255,0.055);
+  --rule:         rgba(255,255,255,0.08);
+  --rule-strong:  rgba(255,255,255,0.14);
+  --text:         #f4f4f5;
+  --muted:        rgba(244,244,245,0.55);
+  --faint:        rgba(244,244,245,0.28);
+  --teal:         #008B98;
+  --teal-light:   #0aabb9;
+  --teal-dim:     rgba(0,139,152,0.18);
+  --teal-border:  rgba(0,139,152,0.3);
+  --teal-glow:    rgba(0,139,152,0.06);
+  --green:        #26C699;
+  --gold:         #C9A96E;
+  --gold-light:   #dfc08a;
+  --serif:        'Cormorant Garamond', Georgia, serif;
+  --sans:         'Montserrat', sans-serif;
+  --body:         'Manrope', sans-serif;
 }
 
 html, body {
-  background: var(--black);
-  color: var(--white);
-  font-family: 'Instrument Sans', sans-serif;
-  font-weight: 300;
+  background: var(--ink-deep);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 400;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: 60px 40px 80px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+
+/* GRAIN */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.025;
+}
+
+/* AMBIENT LIGHT */
+.ambient {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 40% at 15% 10%, rgba(0,139,152,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 45% at 85% 85%, rgba(38,198,153,0.04) 0%, transparent 55%);
+}
+
+/* all content above grain */
+.header, .system, .signal-row { position: relative; z-index: 2; }
 
 /* HEADER */
 .header {
@@ -43,21 +76,23 @@ html, body {
   animation: fadeUp 0.9s ease 0.1s forwards;
 }
 .header-eyebrow {
+  font-family: var(--sans);
   font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   margin-bottom: 16px;
 }
 .header-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--serif);
   font-size: clamp(36px, 5vw, 60px);
   font-weight: 300;
   line-height: 1.1;
-  color: var(--white);
+  color: var(--text);
   margin-bottom: 16px;
 }
-.header-title em { font-style: italic; color: var(--gold-light); }
+.header-title em { font-style: italic; color: var(--teal-light); }
 .header-sub {
   font-size: 13px;
   color: var(--muted);
@@ -73,7 +108,7 @@ html, body {
   gap: 0;
 }
 
-/* TOP ROW: Three Capabilities */
+/* THREE CAPABILITIES */
 .capabilities {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -82,9 +117,9 @@ html, body {
 }
 
 .cap-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  padding: 40px 36px 36px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 40px 36px 56px;
   position: relative;
   overflow: hidden;
   opacity: 0;
@@ -101,26 +136,31 @@ html, body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
   opacity: 0;
   transition: opacity 0.4s;
 }
-.cap-card:hover { border-color: rgba(196,154,42,0.3); background: #181816; }
+.cap-card:hover {
+  border-color: var(--teal-border);
+  background: rgba(0,139,152,0.04);
+}
 .cap-card:hover::after { opacity: 1; }
 
 .cap-num {
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   margin-bottom: 20px;
   display: block;
 }
 .cap-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--serif);
   font-size: 28px;
   font-weight: 400;
-  color: var(--white);
+  color: var(--text);
   margin-bottom: 6px;
   line-height: 1.1;
 }
@@ -129,7 +169,7 @@ html, body {
   color: var(--muted);
   margin-bottom: 28px;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
   letter-spacing: 0.02em;
   line-height: 1.5;
 }
@@ -150,27 +190,28 @@ html, body {
 .cap-items li::before {
   content: '';
   width: 14px; height: 1px;
-  background: var(--gold);
-  opacity: 0.6;
+  background: var(--teal);
+  opacity: 0.5;
   flex-shrink: 0;
 }
 .cap-card:hover .cap-items li { color: var(--muted); }
 
-/* Audience badge */
 .cap-audience {
   position: absolute;
-  bottom: 28px;
-  right: 28px;
+  bottom: 24px;
+  right: 24px;
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.5;
-  border: 1px solid rgba(196,154,42,0.2);
+  color: var(--teal);
+  opacity: 0.6;
+  border: 1px solid var(--teal-border);
   padding: 4px 10px;
 }
 
-/* CONNECTOR: down arrows from caps to loop */
+/* CONNECTORS */
 .connector-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -182,9 +223,9 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  background: rgba(15,15,18,0.8);
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
   position: relative;
   opacity: 0;
   animation: fadeIn 0.6s ease 0.9s forwards;
@@ -192,22 +233,22 @@ html, body {
 .connector-line {
   width: 1px;
   height: 100%;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  opacity: 0.4;
+  background: linear-gradient(to bottom, var(--teal), transparent);
+  opacity: 0.35;
 }
 .connector-arrow {
   position: absolute;
   bottom: 0;
   font-size: 10px;
-  color: var(--gold);
-  opacity: 0.6;
+  color: var(--teal);
+  opacity: 0.5;
 }
 
-/* THE LOOP: center band */
+/* THE LOOP */
 .loop-band {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--gold);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--teal);
   padding: 40px 48px;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -223,13 +264,15 @@ html, body {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 100% at 0% 50%, rgba(196,154,42,0.04) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 100% at 0% 50%, rgba(0,139,152,0.05) 0%, transparent 70%);
 }
 .loop-label-vert {
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   writing-mode: vertical-rl;
   transform: rotate(180deg);
 }
@@ -247,10 +290,10 @@ html, body {
   right: calc(12.5% + 8px);
   height: 1px;
   background: linear-gradient(90deg,
-    var(--gold) 0%,
-    rgba(196,154,42,0.3) 33%,
-    rgba(196,154,42,0.3) 66%,
-    var(--gold) 100%
+    var(--teal) 0%,
+    rgba(0,139,152,0.3) 33%,
+    rgba(0,139,152,0.3) 66%,
+    var(--teal-light) 100%
   );
 }
 .stage {
@@ -267,9 +310,13 @@ html, body {
 .stage-dot {
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--teal);
   flex-shrink: 0;
   position: relative;
+}
+/* last stage dot is gold — the payoff */
+.stage:last-child .stage-dot {
+  background: var(--gold);
 }
 .stage-dot::after {
   content: '';
@@ -278,44 +325,55 @@ html, body {
   transform: translate(-50%, -50%);
   width: 22px; height: 22px;
   border-radius: 50%;
-  border: 1px solid rgba(196,154,42,0.25);
+  border: 1px solid rgba(0,139,152,0.25);
   animation: pulse 2.5s ease infinite;
+}
+.stage:last-child .stage-dot::after {
+  border-color: rgba(201,169,110,0.3);
 }
 .stage:nth-child(2) .stage-dot::after { animation-delay: 0.6s; }
 .stage:nth-child(3) .stage-dot::after { animation-delay: 1.2s; }
 .stage:nth-child(4) .stage-dot::after { animation-delay: 1.8s; }
 
 .stage-num {
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 600;
   letter-spacing: 0.2em;
-  color: var(--gold);
+  color: var(--teal);
   display: block;
   margin-bottom: 6px;
 }
+.stage:last-child .stage-num { color: var(--gold); }
+
 .stage-verb {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--serif);
   font-size: 22px;
   font-weight: 400;
-  color: var(--white);
+  color: var(--text);
   margin-bottom: 4px;
   display: block;
 }
 .stage-cap {
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   opacity: 0.6;
   display: block;
   margin-bottom: 10px;
 }
+.stage:last-child .stage-cap { color: var(--gold); opacity: 0.7; }
+
 .stage-desc {
   font-size: 11px;
   color: var(--faint);
   line-height: 1.65;
 }
 
-/* BOTTOM ROW: audiences */
+/* AUDIENCES */
 .audiences {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -323,8 +381,8 @@ html, body {
   margin-top: 2px;
 }
 .aud-card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--rule);
   padding: 32px 36px;
   display: flex;
   align-items: flex-start;
@@ -336,33 +394,34 @@ html, body {
 .aud-card:nth-child(1) { animation-delay: 1.0s; }
 .aud-card:nth-child(2) { animation-delay: 1.15s; }
 .aud-card:nth-child(3) { animation-delay: 1.3s; }
-.aud-card:hover { border-color: rgba(196,154,42,0.2); }
+.aud-card:hover { border-color: var(--teal-border); }
 
 .aud-icon {
   width: 32px; height: 32px;
-  border: 1px solid rgba(196,154,42,0.3);
+  border: 1px solid var(--teal-border);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  color: var(--gold);
+  color: var(--teal);
   margin-top: 2px;
 }
-.aud-body {}
 .aud-label {
+  font-family: var(--sans);
   font-size: 9px;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   margin-bottom: 6px;
   display: block;
 }
 .aud-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--serif);
   font-size: 20px;
   font-weight: 400;
-  color: var(--white);
+  color: var(--text);
   margin-bottom: 6px;
 }
 .aud-desc {
@@ -371,14 +430,14 @@ html, body {
   line-height: 1.6;
 }
 
-/* SIGNAL SENTENCE */
+/* SIGNAL ROW */
 .signal-row {
   width: 100%;
   max-width: 1100px;
   margin-top: 40px;
   padding: 32px 48px;
-  border: 1px solid var(--border);
-  background: var(--gold-glow);
+  border: 1px solid var(--teal-border);
+  background: rgba(0,139,152,0.04);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -387,14 +446,17 @@ html, body {
   animation: fadeIn 0.8s ease 1.5s forwards;
 }
 .signal-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 2vw, 22px);
   font-weight: 300;
   font-style: italic;
-  color: var(--white);
+  color: var(--text);
   line-height: 1.4;
 }
-.signal-text em { color: var(--gold-light); font-style: normal; }
+.signal-text em {
+  color: var(--gold-light);
+  font-style: normal;
+}
 .signal-flow {
   display: flex;
   align-items: center;
@@ -402,15 +464,17 @@ html, body {
   flex-shrink: 0;
 }
 .signal-step {
+  font-family: var(--sans);
   font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--teal);
   white-space: nowrap;
 }
 .signal-arrow {
-  color: var(--gold);
-  opacity: 0.4;
+  color: var(--teal);
+  opacity: 0.35;
   font-size: 12px;
 }
 
@@ -425,11 +489,13 @@ html, body {
 }
 @keyframes pulse {
   0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.3); }
+  50%       { opacity: 0.6; transform: translate(-50%, -50%) scale(1.3); }
 }
 </style>
 </head>
 <body>
+
+<div class="ambient"></div>
 
 <div class="header">
   <p class="header-eyebrow">2x2 Partners &nbsp;·&nbsp; System Architecture</p>
@@ -451,7 +517,7 @@ html, body {
         <li>Clarify sequencing</li>
         <li>Support execution</li>
       </ul>
-      <span class="cap-audience">Founders & Operators</span>
+      <span class="cap-audience">Founders &amp; Operators</span>
     </div>
     <div class="cap-card">
       <span class="cap-num">Capability 02</span>
@@ -463,7 +529,7 @@ html, body {
         <li>Narrative refinement</li>
         <li>Relationship-driven fundraising</li>
       </ul>
-      <span class="cap-audience">Companies & Fund Managers</span>
+      <span class="cap-audience">Companies &amp; Fund Managers</span>
     </div>
     <div class="cap-card">
       <span class="cap-num">Capability 03</span>
@@ -475,24 +541,15 @@ html, body {
         <li>Alignment-first underwriting</li>
         <li>Long-term partnership</li>
       </ul>
-      <span class="cap-audience">Investors & Allocators</span>
+      <span class="cap-audience">Investors &amp; Allocators</span>
     </div>
   </div>
 
   <!-- CONNECTORS -->
   <div class="connector-row">
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
   </div>
 
   <!-- THE LOOP -->
@@ -530,28 +587,20 @@ html, body {
     </div>
   </div>
 
-  <!-- AUDIENCES -->
+  <!-- REVERSE CONNECTORS -->
   <div class="connector-row" style="transform: scaleY(-1);">
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
-    <div class="connector">
-      <div class="connector-line"></div>
-      <span class="connector-arrow">↓</span>
-    </div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
+    <div class="connector"><div class="connector-line"></div><span class="connector-arrow">↓</span></div>
   </div>
 
+  <!-- AUDIENCES -->
   <div class="audiences">
     <div class="aud-card">
       <div class="aud-icon">◈</div>
       <div class="aud-body">
         <span class="aud-label">Enters via GrowthMatrix™</span>
-        <h3 class="aud-name">Founders & Operators</h3>
+        <h3 class="aud-name">Founders &amp; Operators</h3>
         <p class="aud-desc">Companies that need clarity before they can scale.</p>
       </div>
     </div>
@@ -559,7 +608,7 @@ html, body {
       <div class="aud-icon">◇</div>
       <div class="aud-body">
         <span class="aud-label">Enters via CapitalArch™</span>
-        <h3 class="aud-name">Companies & Fund Managers</h3>
+        <h3 class="aud-name">Companies &amp; Fund Managers</h3>
         <p class="aud-desc">Organizations that need to raise capital intelligently.</p>
       </div>
     </div>
@@ -567,7 +616,7 @@ html, body {
       <div class="aud-icon">◉</div>
       <div class="aud-body">
         <span class="aud-label">Enters via OpportunityAccess™</span>
-        <h3 class="aud-name">Investors & Allocators</h3>
+        <h3 class="aud-name">Investors &amp; Allocators</h3>
         <p class="aud-desc">Investors seeking signal, not noise.</p>
       </div>
     </div>
